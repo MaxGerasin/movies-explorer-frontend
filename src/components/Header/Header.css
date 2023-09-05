@@ -1,0 +1,13 @@
+.header {
+  background: #465DFF;
+}
+
+.header_back_white {
+  background: #FFF;
+}
+
+@media screen and (max-width: 450px) {
+  .header {
+    padding: 0 4px;
+  }
+}

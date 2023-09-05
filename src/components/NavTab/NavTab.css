@@ -1,0 +1,39 @@
+.nav-tab {
+  background: #F5F5F5;
+}
+
+.nav-tab__nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px 0;
+}
+
+.nav-tab__list {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.nav-tab__link {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.23;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  color: #000;
+}
+
+@media screen and (max-width: 450px) {
+  .nav-tab__list {
+    gap: 24px;
+  }
+  .nav-tab__nav {
+    padding: 22px 0;
+  }
+
+  .nav-tab__link {
+    font-size: 11px;
+    line-height: 1.45;
+  }
+}
