@@ -1,0 +1,129 @@
+.about-project {
+  padding: 110px 0;
+}
+
+.about-project__list {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+  margin: 70px 0 110px;
+}
+
+.about-project__list-item {
+  flex: 1;
+}
+
+.about-project__title {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0 0 26px;
+  letter-spacing: -0.8px;
+}
+
+.about-project__text {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.43;
+  margin: 0;
+}
+
+.about-project__timeline {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+}
+
+.about-project__timeline-item {
+  text-align: center;
+}
+
+.about-project__timeline-time {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+  padding: 10px 0;
+  margin: 0 0 14px;
+}
+
+.about-project__timeline-time_type_backend {
+  background: #2BE080;
+}
+
+.about-project__timeline-time_type_frontend {
+  background: #F2F2F2;
+}
+
+.about-project__timeline-type-work {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.21;
+  margin: 0;
+  color: #A0A0A0;
+}
+
+@media screen and (max-width: 768px) {
+  .about-project {
+    padding: 90px 20px;
+  }
+
+  .about-project__list {
+    gap: 30px;
+  }
+
+  .about-project__title {
+    margin-bottom: 22px;
+  }
+
+  .about-project__text {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .about-project__list {
+    margin-bottom: 93px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .about-project {
+    padding: 71px 8px;
+  }
+
+  .about-project__list {
+    flex-direction: column;
+    margin: 61px 0;
+  }
+
+  .about-project__title {
+    margin-bottom: 18px;
+    font-size: 18px;
+    letter-spacing: -0.72px;
+  }
+
+  .about-project__list {
+    gap: 56px;
+  }
+
+  .about-project__text {
+    font-size: 11px;
+    line-height: 145%;
+  }
+
+  .about-project__timeline-time {
+    font-size: 11px;
+  }
+
+  .about-project__timeline {
+    grid-template-columns: 1fr 2fr;
+  }
+
+  .about-project__timeline-type-work {
+    font-size: 11px;
+    font-weight: 400;
+    line-height: normal;
+  }
+
+  .about-project__timeline-time {
+    margin-bottom: 10px;
+  }
+}
