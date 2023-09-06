@@ -18,7 +18,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 20px;
-  padding: 20px 0;
+  padding: 5px 0;
 }
 
 .footer__copyright {
@@ -28,13 +28,15 @@
   margin: 0;
 }
 
-.footer__nav {
+.footer__link {
   display: flex;
   align-items: center;
   gap: 20px;
+  list-style: none;
+  padding: 0;
 }
 
-.footer__link{
+.footer__link-item{
   color: #000;
   font-size: 13px;
   font-weight: 400;
@@ -56,10 +58,12 @@
     flex-direction: column;
   }
 
-  .footer__nav {
+  .footer__link {
     flex-direction: column;
     order: 1;
-    gap: 12px;
+    gap: 5px;
+    margin: 0;
+
   }
 
   .footer__copyright {
@@ -69,11 +73,11 @@
   }
 
   .footer__flex-wrapper {
-    padding-top: 30px;
+    padding-top: 27px;
     gap: 30px;
   }
 
-  .footer__link {
+  .footer__link-item {
     font-size: 12px;
   }
 }

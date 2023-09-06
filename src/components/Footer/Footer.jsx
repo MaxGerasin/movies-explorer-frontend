@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import CenterContainer from '../CenterContainer/CenterContainer';
 import './Footer.css';
 
@@ -11,22 +10,28 @@ export default function Footer() {
         </p>
         <div className="footer__flex-wrapper">
           <p className="footer__copyright">&copy; 2023</p>
-          <nav className="footer__nav">
-            <Link
-              className="footer__link link"
-              to="https://practicum.yandex.ru/"
-              target="_blank"
-            >
-              Яндекс.Практикум
-            </Link>
-            <Link
-              className="footer__link link"
-              to="https://github.com/MaxGerasin"
-              target="_blank"
-            >
-              Github
-            </Link>
-          </nav>
+          <ul className="footer__link">
+            <li>
+              <a
+                className="footer__link-item link"
+                href="https://practicum.yandex.ru/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Яндекс.Практикум
+              </a>
+          </li>
+          <li>
+              <a
+                className="footer__link-item link"
+                href="https://github.com/MaxGerasin"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Github
+              </a>
+          </li>
+          </ul>
         </div>
       </CenterContainer>
     </footer>

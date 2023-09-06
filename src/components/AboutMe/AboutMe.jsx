@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import CenterContainer from '../CenterContainer/CenterContainer';
 import Title from '../Title/Title';
 import photo from '../../images/max-photo.jpg';
@@ -20,13 +19,9 @@ export default function AboutMe() {
               Контур». После того, как прошёл курс по веб-разработке, начал
               заниматься фриланс-заказами и ушёл с постоянной работы.
             </p>
-            <Link
-              className="about-me__link link"
-              to="https://github.com/MaxGerasin"
-              target="_blank"
-            >
+            <a className="about-me__link link" href="https://github.com/MaxGerasin" target="_blank" rel="noreferrer">
               Github
-            </Link>
+            </a>
           </div>
           <img src={photo} alt="Я на фотографии" className="about-me__photo" />
         </div>

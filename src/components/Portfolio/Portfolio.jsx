@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import CenterContainer from '../CenterContainer/CenterContainer';
 import './Portfolio.css';
 
@@ -9,30 +8,37 @@ export default function Portfolio() {
         <h2 className="portfolio__title">Портфолио</h2>
         <ul className="portfolio__list list">
           <li className="portfolio__item">
-            <Link
+            <a
               className="portfolio__link link"
-              to=" https://maxgerasin.github.io/how-to-learn/"
+              href=" https://maxgerasin.github.io/how-to-learn/"
               target="_blank"
+              rel="noreferrer"
             >
               <h3 className="portfolio__title-work">Статичный сайт</h3>
               <span className="portfolio__icon" />
-            </Link>
+            </a>
           </li>
           <li className="portfolio__item">
-            <Link
+            <a
               className="portfolio__link link"
-              to="https://maxgerasin.github.io/russian-travel/"
+              href="https://maxgerasin.github.io/russian-travel/"
               target="_blank"
+              rel="noreferrer"
             >
               <h3 className="portfolio__title-work">Адаптивный сайт</h3>
               <span className="portfolio__icon" />
-            </Link>
+            </a>
           </li>
           <li className="portfolio__item">
-            <Link className="portfolio__link link" to="https://mesto.maxgerasin.nomoreparties.co" target="_blank">
+            <a
+              className="portfolio__link link"
+              href="https://mesto.maxgerasin.nomoreparties.co"
+              target="_blank"
+              rel="noreferrer"
+            >
               <h3 className="portfolio__title-work">Одностраничное приложение</h3>
               <span className="portfolio__icon" />
-            </Link>
+            </a>
           </li>
         </ul>
       </CenterContainer>

@@ -61,6 +61,7 @@
 
 .header__button-burger {
   background-image: url('../../images/burger.svg');
+  background-color: transparent;
   background-repeat: no-repeat;
   width: 44px;
   height: 44px;
@@ -115,6 +116,7 @@
   width: 44px;
   height: 44px;
   background-image: url('../../images/close.svg');
+  background-color: transparent;
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -198,6 +200,7 @@
 
   .header__button-burger {
     background-image: url('../../images/burger.svg');
+    background-color: transparent;
     background-repeat: no-repeat;
     background-size: 36px 35px;
     justify-self: flex-end;
