@@ -28,7 +28,12 @@
 }
 
 .header__link_active{
+  cursor: auto;
   font-weight: 500;
+}
+
+.header__link_active:hover {
+  opacity: 1;
 }
 
 .header__link_type_registry {

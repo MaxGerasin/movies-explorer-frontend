@@ -20,6 +20,14 @@
   padding: 10px 20px;
 }
 
+.movies-card-list__text-nothing {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0;
+}
+
 @media screen and (max-width: 768px) {
   .movies-card-list {
     padding-bottom: 90px;

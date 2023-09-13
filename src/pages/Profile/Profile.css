@@ -56,10 +56,6 @@
   border-bottom: 1px solid #E8E8E8;
 }
 
-.profile__label_disabled {
-  cursor: default;
-}
-
 .profile__button-wrapper {
   display: flex;
   flex-direction: column;
@@ -73,6 +69,10 @@
   font-size: 13px;
   line-height: 1.1;
   background: none;
+}
+
+.profile__button:disabled {
+  cursor: auto;
 }
 
 .profile__button_type_edit-save {

@@ -6,7 +6,7 @@
 .search-form__form {
   display: flex;
   flex-direction: column;
-  gap: 42px;
+  gap: 20px;
 }
 
 .search-form__search-wrapper {
@@ -36,6 +36,10 @@
 
 .search-form__input:focus {
   outline: 2px solid #2BE080;
+}
+
+.search-form__input_error:focus {
+  outline: 2px solid #EE3465;
 }
 
 .search-form__button {

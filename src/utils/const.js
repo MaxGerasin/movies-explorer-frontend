@@ -97,4 +97,7 @@ const FILMS = [
   },
 ];
 
-export { FILMS };
+const URL = 'https://api.beatfilms.maxgerasin.nomoredomainsicu.ru';
+
+export { FILMS, URL };
+

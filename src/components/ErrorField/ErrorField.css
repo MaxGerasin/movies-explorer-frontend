@@ -1,0 +1,12 @@
+.error-field {
+  visibility: hidden;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: normal;
+  margin-top: 10px;
+  color: #EE3465;
+}
+
+.error-field_active {
+  visibility: visible;
+}

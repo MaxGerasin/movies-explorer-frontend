@@ -8,11 +8,10 @@ import AboutMe from '../../components/AboutMe/AboutMe';
 import Portfolio from '../../components/Portfolio/Portfolio';
 import Footer from '../../components/Footer/Footer';
 
-export default function Main() {
+export default function Main({ isLogin }) {
   return (
     <>
-      <Header />
-
+      <Header isLogin={isLogin} />
       <MainStyled>
         <Promo />
         <NavTab />
@@ -21,7 +20,6 @@ export default function Main() {
         <AboutMe />
         <Portfolio />
       </MainStyled>
-
       <Footer />
     </>
   );
