@@ -60,8 +60,9 @@ export default function App() {
   useEffect(() => {
     if (localStorage.getItem('isLogin')) {
       checkToken()
-        .then(() => {
+        .then(() => { if (localStorage.getItem('isLogin') !== 'true') {
           setIsLogin(true);
+        }
         })
         .catch((err) => {
           setServerError(err);
@@ -83,7 +84,6 @@ export default function App() {
               <ProtectedRoute
                 isLogin={isLogin}
                 setIsLogin={setIsLogin}
-                getUserInfoHandler={getUserInfoHandler}
                 exitProfile={exitProfile}
                 element={Profile}
               />

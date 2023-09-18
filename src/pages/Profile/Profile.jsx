@@ -7,7 +7,7 @@ import { updateUserInfo } from '../../utils/MainApi';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './Profile.css';
 
-export default function Profile({ getUserInfoHandler, exitProfile }) {
+export default function Profile({ exitProfile }) {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -35,13 +35,16 @@ export default function Profile({ getUserInfoHandler, exitProfile }) {
     evt.preventDefault();
     updateUserInfo({ name, email })
       .then(({ name, email }) => {
-        getUserInfoHandler();
         checkEdit(name, email);
         setSuccessMessage('Данные обновлены');
       })
       .catch((err) => {
         setServerError(err);
-      });
+      })
+      .finally(() =>  setTimeout(() => {
+        setSuccessMessage('');
+        setServerError('');
+      }, 3000));
   };
 
   useEffect(() => {
@@ -64,11 +67,23 @@ export default function Profile({ getUserInfoHandler, exitProfile }) {
               <div>
                 <label className="profile__label">
                   <span className="profile__label-text">Имя</span>
-                  <input onChange={handleName} value={name} type="text" className="profile__input" />
+                  <input
+                    onChange={handleName}
+                    value={name}
+                    type="text"
+                    className="profile__input"
+                    required
+                  />
                 </label>
                 <label className="profile__label">
                   <span className="profile__label-text">E-mail</span>
-                  <input onChange={handleEmail} value={email} type="text" className="profile__input" />
+                  <input
+                    onChange={handleEmail}
+                    value={email}
+                    type="email"
+                    className="profile__input"
+                    required
+                  />
                 </label>
               </div>
               <div className="profile__button-wrapper">
