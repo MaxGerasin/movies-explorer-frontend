@@ -60,16 +60,15 @@ export default function App() {
   useEffect(() => {
     if (localStorage.getItem('isLogin')) {
       checkToken()
-        .then(() => { if (localStorage.getItem('isLogin') !== 'true') {
+        .then(() => {
           setIsLogin(true);
-        }
         })
         .catch((err) => {
           setServerError(err);
           exitProfile();
         });
     }
-  }, []);
+  }, [])
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
