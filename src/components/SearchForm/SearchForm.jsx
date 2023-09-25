@@ -23,6 +23,7 @@ export default function SearchForm({
 }) {
   const { pathname } = useLocation();
   const [isLoading, setIsLoading] = useState(false);
+  const allMovies = JSON.parse(localStorage.getItem('films')) ?? [];
   const {
     register,
     formState: { errors },
@@ -33,25 +34,24 @@ export default function SearchForm({
     resolver: pathname === '/saved-movies' ? null : yupResolver(queryFilmsSchema),
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     if (pathname === '/movies') {
       setIsLoading(true);
-      getFilms()
-        .then((res) => {
-          localStorage.setItem('films', JSON.stringify(res));
-          localStorage.setItem('queryFilms', data.queryFilms);
-          localStorage.setItem('isShortFilms', checkShortFilms);
-        })
-        .then(() => {
-          handleSetFilms(data.queryFilms);
-          setIsNothingFound(true);
-          setIsLoading(false);
-          handleSetCount(limit);
-        })
-        .catch((err) => {
+      if (!allMovies.length) {
+        try {
+          const films = await getFilms();
+          localStorage.setItem('films', JSON.stringify(films));
+        } catch (err) {
           setServerError(err);
           setIsLoading(false);
-        });
+        }
+      }
+      localStorage.setItem('queryFilms', data.queryFilms);
+      localStorage.setItem('isShortFilms', checkShortFilms);
+      handleSetFilms(data.queryFilms);
+      setIsNothingFound(true);
+      setIsLoading(false);
+      handleSetCount(limit);
     } else {
       handleSetFilms(data.queryFilms);
       setIsNothingFound(true);
