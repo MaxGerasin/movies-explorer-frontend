@@ -5,7 +5,7 @@ import { addFilmSaved, removeFilmSaved } from '../../utils/MainApi';
 import Modal from '../Modal/Modal';
 import './MoviesCard.css';
 
-const MoviesCard = memo(({ film, getFilmsHandler }) => {
+const MoviesCard = memo(({ film, onIsLikedChanged }) => {
   const { pathname } = useLocation();
   const { image, nameRU, duration, trailerLink, country, director, year, description, nameEN, id, movieId } =
     film;
@@ -29,18 +29,18 @@ const MoviesCard = memo(({ film, getFilmsHandler }) => {
         thumbnail: `https://api.nomoreparties.co${image.formats.thumbnail.url}`,
         movieId: id,
       })
-        .then(() => {
+        .then((resp) => {
           setIsLike(true);
-          getFilmsHandler();
+          onIsLikedChanged(true, resp);
         })
         .catch((err) => {
           setServerError(err);
         });
     } else {
       removeFilmSaved(pathname === '/saved-movies' ? movieId : id)
-        .then(() => {
+        .then((resp) => {
           setIsLike(false);
-          getFilmsHandler();
+          onIsLikedChanged(false, resp);
         })
         .catch((err) => {
           setServerError(err);

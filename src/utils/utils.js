@@ -1,28 +1,11 @@
 const searchFilms = (filmsData, query, checkShortFilms, checkShortFilmsSaved) => {
   let filmsFilter;
   if (query !== null && Array.isArray(filmsData)) {
+    const lowerQuery = query.toLowerCase().trim();
     filmsFilter = filmsData.filter(
-      (film) =>
-        film.nameRU
-          .trim()
-          .split(' ')
-          .some((word) => word.match(RegExp(`^${query.trim()}`, 'i'))) ||
-        film.nameEN
-          .trim()
-          .split(' ')
-          .some((word) => word.match(RegExp(`^${query.trim()}`, 'i'))) ||
-        film.nameRU
-          .trim()
-          .split(/[.,/?'"!@#$%^&*()_+~`№^;:&|<>\-=\\{}«»[]/)
-          .join('')
-          .split(' ')
-          .some((word) => word.match(RegExp(`^${query.trim()}`, 'i'))) ||
-        film.nameEN
-          .trim('')
-          .split(/[.,/?'"!@#$%^&*()_+~`№^;:&|<>\-=\\{}«»[]/)
-          .join('')
-          .split(' ')
-          .some((word) => word.match(RegExp(`^${query.trim()}`, 'i')))
+      (film) => 
+        film.nameRU.toLowerCase().includes(lowerQuery) ||
+        film.nameEN.toLowerCase().includes(lowerQuery)
     );
   }
 

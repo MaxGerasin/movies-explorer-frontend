@@ -85,6 +85,7 @@ export default function App() {
                 setIsLogin={setIsLogin}
                 exitProfile={exitProfile}
                 getUserInfoHandler={getUserInfoHandler}
+                setCurrentUser={setCurrentUser}
                 element={Profile}
               />
             }

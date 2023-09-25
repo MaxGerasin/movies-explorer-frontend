@@ -29,6 +29,18 @@ export default function Movies() {
   const { pathname } = useLocation();
   const [count, setCount] = useState(limit);
 
+  const onIsLikedChanged = (isLike, filmData) => {
+    setFilmsWithFilmsSaved(
+      films.map((film) => film.movieId === filmData.movieId ? ({...film, isLike}) : film)
+    );
+    if (isLike) {
+      setFilmsSaved(filmsSaved.concat({...filmData, isLike: true}));
+    } else {
+      
+      setFilmsSaved(filmsSaved.filter(f => f.movieId !== filmData.movieId));
+    }
+
+  };
   const getFilmsHandler = () => {
     getFilms()
       .then((filmsSaved) => {
@@ -144,6 +156,7 @@ export default function Movies() {
           handleSetCount={handleSetCount}
           limit={limit}
           count={count}
+          onIsLikedChanged={onIsLikedChanged}
         />
       </MainStyled>
       <Footer />

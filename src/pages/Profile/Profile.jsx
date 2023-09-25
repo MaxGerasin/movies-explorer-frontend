@@ -7,7 +7,7 @@ import { updateUserInfo } from '../../utils/MainApi';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './Profile.css';
 
-export default function Profile({ getUserInfoHandler, exitProfile }) {
+export default function Profile({ exitProfile, setCurrentUser }) {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -35,7 +35,7 @@ export default function Profile({ getUserInfoHandler, exitProfile }) {
     evt.preventDefault();
     updateUserInfo({ name, email })
       .then(({ name, email }) => {
-        getUserInfoHandler();
+        setCurrentUser({ name, email });
         checkEdit(name, email);
         setSuccessMessage('Данные обновлены');
       })
