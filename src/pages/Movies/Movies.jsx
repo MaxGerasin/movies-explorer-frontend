@@ -35,15 +35,13 @@ export default function Movies() {
     );
     if (isLike) {
       setFilmsSaved(filmsSaved.concat({...filmData, isLike: true}));
-    } else {  
+    } else {
       setFilmsSaved(filmsSaved.filter(f => f.movieId !== filmData.movieId));
     }
 
   };
   const getFilmsHandler = () => {
-    getFilms()
-      .then((filmsSaved) => {
-        if (films) {
+    if (films) {
           setFilmsWithFilmsSaved(
             films.map((film) => ({
               ...film,
@@ -52,10 +50,6 @@ export default function Movies() {
           );
           setFilmsSaved(filmsSaved.map((film) => ({ ...film, isLike: true })));
         }
-      })
-      .catch((err) => {
-        setServerErrorModal(err);
-      });
   };
 
   const handleSetCount = (count) => {
@@ -104,7 +98,7 @@ export default function Movies() {
   useEffect(() => {
     if (films) {
       getFilmsHandler();
-    }  
+    }
   }, [films]);
 
   useEffect(() => {
@@ -149,8 +143,11 @@ export default function Movies() {
         />
         <MoviesCardList
           filmsSavedSearch={filmsSavedSearch}
+          setFilmsSavedSearch={setFilmsSavedSearch}
           filmsSaved={filmsSaved}
+          setFilmsSaved={setFilmsSaved}
           films={filmsWithFilmsSaved}
+          setFilms={setFilms}
           isNothingFound={isNothingFound}
           serverError={serverError}
           handleSetCount={handleSetCount}

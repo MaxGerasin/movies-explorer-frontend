@@ -4,6 +4,10 @@ import CenterContainer from '../../components/CenterContainer/CenterContainer';
 import MainStyled from '../../components/MainStyled/MainStyled';
 import Modal from '../../components/Modal/Modal';
 import { updateUserInfo } from '../../utils/MainApi';
+import { useForm } from 'react-hook-form';
+import ErrorField from '../../components/ErrorField/ErrorField';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { profileSchema } from '../../utils/yup';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './Profile.css';
 
@@ -14,6 +18,12 @@ export default function Profile({ exitProfile, setCurrentUser }) {
   const [isDisabled, setIsDisabled] = useState(true);
   const [serverError, setServerError] = useState('');
   const currentUser = useContext(CurrentUserContext);
+
+  const {
+    register,
+    handleSubmit,
+  formState: { errors },
+} = useForm({ resolver: yupResolver(profileSchema) });
 
   const handleEmail = (evt) => {
     setEmail(evt.target.value);
@@ -31,8 +41,8 @@ export default function Profile({ exitProfile, setCurrentUser }) {
     }
   };
 
-  const onEdit = (evt) => {
-    evt.preventDefault();
+  const onEdit = () => {
+    
     updateUserInfo({ name, email })
       .then(({ name, email }) => {
         setCurrentUser({ name, email });
@@ -64,11 +74,12 @@ export default function Profile({ exitProfile, setCurrentUser }) {
         <section className="profile" aria-label="Профиль">
           <CenterContainer>
             <h1 className="profile__title">Привет, {currentUser.name}!</h1>
-            <form onSubmit={onEdit} className="profile__form">
+            <form onSubmit={handleSubmit(onEdit)} className="profile__form">
               <div>
                 <label className="profile__label">
                   <span className="profile__label-text">Имя</span>
                   <input
+                   {...register('name')}
                     onChange={handleName}
                     value={name}
                     type="text"
@@ -76,9 +87,13 @@ export default function Profile({ exitProfile, setCurrentUser }) {
                     required
                   />
                 </label>
+                <ErrorField isActive={errors.name}>
+                    {errors.name ? errors.name.message : 'Ошибок нет'}
+                </ErrorField>
                 <label className="profile__label">
                   <span className="profile__label-text">E-mail</span>
                   <input
+                    {...register('email')}
                     onChange={handleEmail}
                     value={email}
                     type="email"
@@ -86,6 +101,9 @@ export default function Profile({ exitProfile, setCurrentUser }) {
                     required
                   />
                 </label>
+                <ErrorField isActive={errors.email}>
+                {errors.email ? errors.email.message : 'Ошибок нет'}
+                </ErrorField>
               </div>
               <div className="profile__button-wrapper">
                 <button

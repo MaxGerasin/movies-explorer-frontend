@@ -97,7 +97,7 @@ const FILMS = [
   },
 ];
 
-const URL = 'http://127.0.0.1:3002';
+const URL = 'https://api.beatfilms.maxgerasin.nomoredomainsicu.ru';
 
 export { FILMS, URL };
 

@@ -5,17 +5,16 @@ import { addFilmSaved, removeFilmSaved } from '../../utils/MainApi';
 import Modal from '../Modal/Modal';
 import './MoviesCard.css';
 
-const MoviesCard = memo(({ film, onIsLikedChanged }) => {
+const MoviesCard = memo(({ film, onIsLikedChanged, updateLikedFilm }) => {
   const { pathname } = useLocation();
   const { image, nameRU, duration, trailerLink, country, director, year, description, nameEN, id, movieId } =
     film;
   const hours = Math.floor(duration / 60);
   const minutes = duration % 60;
-  const [isLike, setIsLike] = useState(film.isLike);
   const [serverError, setServerError] = useState('');
 
   const like = () => {
-    if (!isLike) {
+    if (!film.isLike) {
       addFilmSaved({
         country,
         director,
@@ -30,7 +29,7 @@ const MoviesCard = memo(({ film, onIsLikedChanged }) => {
         movieId: id,
       })
         .then((resp) => {
-          setIsLike(true);
+          updateLikedFilm(true, resp)
           onIsLikedChanged(true, resp);
         })
         .catch((err) => {
@@ -39,7 +38,7 @@ const MoviesCard = memo(({ film, onIsLikedChanged }) => {
     } else {
       removeFilmSaved(pathname === '/saved-movies' ? movieId : id)
         .then((resp) => {
-          setIsLike(false);
+          updateLikedFilm(false, resp)
           onIsLikedChanged(false, resp);
         })
         .catch((err) => {
@@ -68,7 +67,7 @@ const MoviesCard = memo(({ film, onIsLikedChanged }) => {
               <span
                 className={clsx(
                   'movies-card__like-button-icon',
-                  isLike && 'movies-card__like-button-icon_active'
+                  film.isLike && 'movies-card__like-button-icon_active'
                 )}
               ></span>
             </button>

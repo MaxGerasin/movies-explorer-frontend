@@ -7,8 +7,11 @@ import './MoviesCardList.css';
 
 export default function MoviesCardList({
   filmsSavedSearch,
+  setFilmsSavedSearch,
   filmsSaved,
+  setFilmsSaved,
   films,
+  setFilms,
   isNothingFound,
   serverError,
   handleSetCount,
@@ -19,6 +22,21 @@ export default function MoviesCardList({
   const [filmsLimit, setFilmsLimit] = useState([]);
   const [isLastCardsRow, setIsLastCardsRow] = useState(false);
   const { pathname } = useLocation();
+
+  const updateLikedFilm = (isLike, filmData) => {
+    if (films) {
+      setFilms(films.map((film) => film.id === filmData.movieId ? ({...film, isLike}) : film))
+    }
+    if (filmsLimit){
+      setFilmsLimit(filmsLimit.map((film) => film.id === filmData.movieId ? ({...film, isLike}) : film))
+    }
+    if (filmsSavedSearch) {
+      setFilmsSavedSearch(filmsSavedSearch.map((film) => film.id === filmData.movieId ? ({...film, isLike}) : film))
+    }
+    if (filmsSaved) {
+      setFilmsSaved(filmsSaved.map((film) => film.id === filmData.movieId ? ({...film, isLike}) : film))
+    }
+  };
 
   const getMoreFilms = () => {
     handleSetCount(count + limit);
@@ -54,7 +72,7 @@ export default function MoviesCardList({
             <ul className="movies-card-list__list list">
               {filmsLimit.map((film) => (
                 <li key={film.id}>
-                  <MoviesCard film={film}  onIsLikedChanged={onIsLikedChanged} />
+                  <MoviesCard film={film}  onIsLikedChanged={onIsLikedChanged}  updateLikedFilm={updateLikedFilm}/>
                 </li>
               ))}
             </ul>
@@ -73,13 +91,13 @@ export default function MoviesCardList({
             {!!filmsSavedSearch.length
               ? filmsSavedSearch.map((film) => (
                   <li key={film.movieId}>
-                    <MoviesCard film={film} isLike  onIsLikedChanged={onIsLikedChanged} />
+                    <MoviesCard film={film} isLike  onIsLikedChanged={onIsLikedChanged} updateLikedFilm={updateLikedFilm}/>
                   </li>
                 ))
               : !isNothingFound &&
                 filmsSaved.map((film) => (
                   <li key={film.movieId}>
-                    <MoviesCard film={film} isLike  onIsLikedChanged={onIsLikedChanged} />
+                    <MoviesCard film={film} isLike  onIsLikedChanged={onIsLikedChanged} updateLikedFilm={updateLikedFilm}/>
                   </li>
                 ))}
           </ul>

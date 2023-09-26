@@ -21,4 +21,13 @@ const loginSchema = object().shape({
   password: string().required('Обязательное поле'),
 });
 
-export { queryFilmsSchema, registerSchema, loginSchema };
+const profileSchema = object().shape({
+  name: string()
+    .required('Обязательное поле')
+    .matches(/^[\p{L}\s-]+$/u, 'Поле name содержит только латиницу, кириллицу, пробел или дефис'),
+  email: string()
+    .required('Введите новый Email или нажмите редактировать')
+    .matches(/^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/g, 'Неправильный формат'),
+});
+
+export { queryFilmsSchema, registerSchema, loginSchema, profileSchema };
