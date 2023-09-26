@@ -35,8 +35,7 @@ export default function Movies() {
     );
     if (isLike) {
       setFilmsSaved(filmsSaved.concat({...filmData, isLike: true}));
-    } else {
-      
+    } else {  
       setFilmsSaved(filmsSaved.filter(f => f.movieId !== filmData.movieId));
     }
 
@@ -105,7 +104,7 @@ export default function Movies() {
   useEffect(() => {
     if (films) {
       getFilmsHandler();
-    }
+    }  
   }, [films]);
 
   useEffect(() => {
@@ -154,7 +153,6 @@ export default function Movies() {
           films={filmsWithFilmsSaved}
           isNothingFound={isNothingFound}
           serverError={serverError}
-          getFilmsHandler={getFilmsHandler}
           handleSetCount={handleSetCount}
           limit={limit}
           count={count}
