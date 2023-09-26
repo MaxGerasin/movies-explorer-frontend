@@ -4,10 +4,8 @@ import Header from '../../components/Header/Header';
 import MainStyled from '../../components/MainStyled/MainStyled';
 import MoviesCardList from '../../components/MoviesCardList/MoviesCardList';
 import SearchForm from '../../components/SearchForm/SearchForm';
-import Modal from '../../components/Modal/Modal';
 import Footer from '../../components/Footer/Footer';
 import { useResize } from '../../hooks/useResize';
-import { getFilms } from '../../utils/MainApi';
 import { searchFilms } from '../../utils/utils';
 
 
@@ -19,7 +17,6 @@ export default function Movies() {
   const [checkShortFilmsSaved, setCheckShortFilmsSaved] = useState(false);
   const [isNothingFound, setIsNothingFound] = useState(false);
   const [serverError, setServerError] = useState('');
-  const [serverErrorModal, setServerErrorModal] = useState('');
   const [filmsWithFilmsSaved, setFilmsWithFilmsSaved] = useState([]);
   const [filmsSaved, setFilmsSaved] = useState([]);
   const [filmsSavedSearch, setFilmsSavedSearch] = useState([]);
@@ -157,7 +154,6 @@ export default function Movies() {
         />
       </MainStyled>
       <Footer />
-      {serverErrorModal && <Modal>{serverErrorModal}</Modal>}
     </>
   );
 }

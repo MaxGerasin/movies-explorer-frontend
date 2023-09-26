@@ -27,9 +27,6 @@ export default function MoviesCardList({
     if (films) {
       setFilms(films.map((film) => film.id === filmData.movieId ? ({...film, isLike}) : film))
     }
-    if (filmsLimit){
-      setFilmsLimit(filmsLimit.map((film) => film.id === filmData.movieId ? ({...film, isLike}) : film))
-    }
     if (filmsSavedSearch) {
       setFilmsSavedSearch(filmsSavedSearch.map((film) => film.id === filmData.movieId ? ({...film, isLike}) : film))
     }
