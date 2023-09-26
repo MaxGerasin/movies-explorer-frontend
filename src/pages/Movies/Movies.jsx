@@ -31,7 +31,7 @@ export default function Movies() {
 
   const onIsLikedChanged = (isLike, filmData) => {
     setFilmsWithFilmsSaved(
-      films.map((film) => film.movieId === filmData.movieId ? ({...film, isLike}) : film)
+      films.map((film) => film.id === filmData.movieId ? ({...film, isLike}) : film)
     );
     if (isLike) {
       setFilmsSaved(filmsSaved.concat({...filmData, isLike: true}));
@@ -103,7 +103,9 @@ export default function Movies() {
   }, [checkShortFilmsSaved]);
 
   useEffect(() => {
-    getFilmsHandler();
+    if (films) {
+      getFilmsHandler();
+    }
   }, [films]);
 
   useEffect(() => {

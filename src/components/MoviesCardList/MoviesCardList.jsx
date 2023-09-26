@@ -11,7 +11,6 @@ export default function MoviesCardList({
   films,
   isNothingFound,
   serverError,
-  getFilmsHandler,
   handleSetCount,
   count,
   limit,
@@ -55,7 +54,7 @@ export default function MoviesCardList({
             <ul className="movies-card-list__list list">
               {filmsLimit.map((film) => (
                 <li key={film.id}>
-                  <MoviesCard film={film} getFilmsHandler={getFilmsHandler} onIsLikedChanged={onIsLikedChanged} />
+                  <MoviesCard film={film}  onIsLikedChanged={onIsLikedChanged} />
                 </li>
               ))}
             </ul>
@@ -74,13 +73,13 @@ export default function MoviesCardList({
             {!!filmsSavedSearch.length
               ? filmsSavedSearch.map((film) => (
                   <li key={film.movieId}>
-                    <MoviesCard film={film} isLike getFilmsHandler={getFilmsHandler} onIsLikedChanged={onIsLikedChanged} />
+                    <MoviesCard film={film} isLike  onIsLikedChanged={onIsLikedChanged} />
                   </li>
                 ))
               : !isNothingFound &&
                 filmsSaved.map((film) => (
                   <li key={film.movieId}>
-                    <MoviesCard film={film} isLike getFilmsHandler={getFilmsHandler} onIsLikedChanged={onIsLikedChanged} />
+                    <MoviesCard film={film} isLike  onIsLikedChanged={onIsLikedChanged} />
                   </li>
                 ))}
           </ul>
