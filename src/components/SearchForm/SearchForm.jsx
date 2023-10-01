@@ -1,15 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useLocation } from 'react-router-dom';
-import { yupResolver } from '@hookform/resolvers/yup';
 import clsx from 'clsx';
-import { useForm } from 'react-hook-form';
 import CenterContainer from '../CenterContainer/CenterContainer';
-import { queryFilmsSchema } from '../../utils/yup';
 import ErrorField from '../ErrorField/ErrorField';
-import { getFilms } from '../../utils/MoviesApi';
 import Preloader from '../Preloader/Preloader';
 import './SearchForm.css';
+import { useFormWithValidation } from '../../hooks/useFormWithValidation';
 
 export default function SearchForm({
   handleSetFilms,
@@ -17,70 +14,61 @@ export default function SearchForm({
   checkShortFilms,
   checkShortFilmsSaved,
   setIsNothingFound,
-  setServerError,
   handleSetCount,
   limit,
+  isLoading,
+  getAllFilms
 }) {
   const { pathname } = useLocation();
-  const [isLoading, setIsLoading] = useState(false);
-  const allMovies = JSON.parse(localStorage.getItem('films')) ?? [];
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-    setValue,
-    getValues,
-  } = useForm({
-    resolver: pathname === '/saved-movies' ? null : yupResolver(queryFilmsSchema),
-  });
 
-  const onSubmit = async (data) => {
+  const {
+    values,
+    handleChange,
+    errors,
+    setValues
+  } = useFormWithValidation();
+
+  const onSubmit = async (evt) => {
+    evt.preventDefault()
     if (pathname === '/movies') {
-      setIsLoading(true);
-      if (!allMovies.length) {
-        try {
-          const films = await getFilms();
-          localStorage.setItem('films', JSON.stringify(films));
-        } catch (err) {
-          setServerError(err);
-          setIsLoading(false);
-        }
-      }
-      localStorage.setItem('queryFilms', data.queryFilms);
+      await getAllFilms();
+      localStorage.setItem('queryFilms', values.queryFilms);
       localStorage.setItem('isShortFilms', checkShortFilms);
-      handleSetFilms(data.queryFilms);
+      handleSetFilms(values.queryFilms);
       setIsNothingFound(true);
-      setIsLoading(false);
       handleSetCount(limit);
     } else {
-      handleSetFilms(data.queryFilms);
+      handleSetFilms(values.queryFilms);
       setIsNothingFound(true);
     }
   };
 
   useEffect(() => {
-    setValue('queryFilms', pathname === '/movies' ? localStorage.getItem('queryFilms') : '');
+    setValues({ queryFilms: pathname === '/movies' ? localStorage.getItem('queryFilms') : '' });
   }, [pathname]);
 
   return (
     <CenterContainer>
       <section className="search-form" aria-label="Поиск по фильмам">
-        <form onSubmit={handleSubmit(onSubmit)} className="search-form__form">
+        <form onSubmit={onSubmit} className="search-form__form">
           <div className="search-form__search-wrapper">
             <input
-              {...register('queryFilms')}
+              name='queryFilms'
+              onChange={handleChange}
+              value={values.queryFilms ?? ''}
               type="text"
               className={clsx('search-form__input', errors.queryFilms && 'search-form__input_error')}
               placeholder="Фильм"
+              required
             />
             <button className="search-form__button button" />
-            <ErrorField isActive={errors.queryFilms}>
-              {errors.queryFilms ? errors.queryFilms.message : 'Ошибок нет'}
+            <ErrorField>
+              {errors.queryFilms ?? ''}
             </ErrorField>
           </div>
           <label className="search-form__label-tumbler">
             <input
-              onChange={() => handleCheckShortFilms(getValues('queryFilms'))}
+              onChange={() => handleCheckShortFilms(values.queryFilms)}
               checked={pathname === '/movies' ? checkShortFilms : checkShortFilmsSaved}
               type="checkbox"
               className="search-form__tumbler"

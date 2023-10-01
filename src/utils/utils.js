@@ -1,9 +1,10 @@
 const searchFilms = (filmsData, query, checkShortFilms, checkShortFilmsSaved) => {
   let filmsFilter;
+
   if (query !== null && Array.isArray(filmsData)) {
     const lowerQuery = query.toLowerCase().trim();
     filmsFilter = filmsData.filter(
-      (film) => 
+      (film) =>
         film.nameRU.toLowerCase().includes(lowerQuery) ||
         film.nameEN.toLowerCase().includes(lowerQuery)
     );

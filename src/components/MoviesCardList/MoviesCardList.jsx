@@ -7,33 +7,21 @@ import './MoviesCardList.css';
 
 export default function MoviesCardList({
   filmsSavedSearch,
-  setFilmsSavedSearch,
   filmsSaved,
-  setFilmsSaved,
   films,
-  setFilms,
   isNothingFound,
   serverError,
   handleSetCount,
   count,
   limit,
   onIsLikedChanged,
+  errorMessage
 }) {
+
+
   const [filmsLimit, setFilmsLimit] = useState([]);
   const [isLastCardsRow, setIsLastCardsRow] = useState(false);
   const { pathname } = useLocation();
-
-  const updateLikedFilm = (isLike, filmData) => {
-    if (films) {
-      setFilms(films.map((film) => film.id === filmData.movieId ? ({...film, isLike}) : film))
-    }
-    if (filmsSavedSearch) {
-      setFilmsSavedSearch(filmsSavedSearch.map((film) => film.id === filmData.movieId ? ({...film, isLike}) : film))
-    }
-    if (filmsSaved) {
-      setFilmsSaved(filmsSaved.map((film) => film.id === filmData.movieId ? ({...film, isLike}) : film))
-    }
-  };
 
   const getMoreFilms = () => {
     handleSetCount(count + limit);
@@ -48,9 +36,13 @@ export default function MoviesCardList({
   };
 
   const renderCards = () => {
-    setFilmsLimit(films.slice(0, count));
-    findLastCardsRow();
+      setFilmsLimit(films.slice(0, count));
+      findLastCardsRow();
   };
+
+  const handleLikedFilm = (film) => {
+    return filmsSaved.find(movie => movie.movieId === film.id);
+  }
 
   useEffect(() => {
     renderCards();
@@ -63,44 +55,50 @@ export default function MoviesCardList({
   return (
     <section className="movies-card-list" aria-label="Карточки фильмов">
       <CenterContainer>
-        {serverError && <ErrorField isActive>{serverError}</ErrorField>}
+        {serverError && <ErrorField>{serverError}</ErrorField>}
         {pathname === '/movies' && !!filmsLimit.length && (
           <>
             <ul className="movies-card-list__list list">
               {filmsLimit.map((film) => (
                 <li key={film.id}>
-                  <MoviesCard film={film}  onIsLikedChanged={onIsLikedChanged}  updateLikedFilm={updateLikedFilm}/>
+                  <MoviesCard
+                    film={film}
+                    onIsLikedChanged={onIsLikedChanged}
+                    isLiked={handleLikedFilm(film)}
+                  />
                 </li>
               ))}
             </ul>
             {pathname === '/movies' && !isLastCardsRow && (
-              <button onClick={getMoreFilms} type="button" className="movies-card-list__button button">
+              <button onClick={getMoreFilms} type="button"
+                      className="movies-card-list__button button">
                 Ещё
               </button>
             )}
           </>
         )}
-        {pathname === '/movies' && !filmsLimit.length && isNothingFound && (
-          <p className="movies-card-list__text-nothing">Ничего не найдено</p>
+        {pathname === '/movies' && !filmsLimit.length && (
+          <p
+            className="movies-card-list__text-nothing">{isNothingFound ? 'Ничего не найдено' : 'Нужно ввести ключевое слово'}</p>
         )}
         {pathname === '/saved-movies' && (
           <ul className="movies-card-list__list list">
             {!!filmsSavedSearch.length
               ? filmsSavedSearch.map((film) => (
-                  <li key={film.movieId}>
-                    <MoviesCard film={film} isLike  onIsLikedChanged={onIsLikedChanged} updateLikedFilm={updateLikedFilm}/>
-                  </li>
-                ))
+                <li key={film.movieId}>
+                  <MoviesCard film={film} errorMessage={errorMessage} onIsLikedChanged={onIsLikedChanged} />
+                </li>
+              ))
               : !isNothingFound &&
-                filmsSaved.map((film) => (
-                  <li key={film.movieId}>
-                    <MoviesCard film={film} isLike  onIsLikedChanged={onIsLikedChanged} updateLikedFilm={updateLikedFilm}/>
-                  </li>
-                ))}
+              filmsSaved.map((film) => (
+                <li key={film.movieId}>
+                  <MoviesCard film={film} errorMessage={errorMessage} onIsLikedChanged={onIsLikedChanged} />
+                </li>
+              ))}
           </ul>
         )}
-        {pathname === '/saved-movies' && !filmsSavedSearch.length && isNothingFound && (
-          <p className="movies-card-list__text-nothing">Ничего не найдено</p>
+        {pathname === '/saved-movies' && !filmsSavedSearch.length && (
+          <p className="movies-card-list__text-nothing">{isNothingFound ? 'Ничего не найдено' : 'Нет сохраненных фильмов'}</p>
         )}
       </CenterContainer>
     </section>

@@ -5,36 +5,75 @@ import Movies from '../../pages/Movies/Movies';
 import Profile from '../../pages/Profile/Profile';
 import Error404 from '../../pages/Error404/Error404';
 import Auth from '../../pages/Auth/Auth';
-import { getUserInfo, checkToken, logout } from '../../utils/MainApi';
+import {
+  addFilmSaved,
+  getFilms,
+  getUserInfo,
+  logout,
+  removeFilmSaved
+} from '../../utils/MainApi';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import Modal from '../Modal/Modal';
 
 export default function App() {
-  const [currentUser, setCurrentUser] = useState({ name: '', email: '' });
-  const [isLogin, setIsLogin] = useState(localStorage.getItem('isLogin') || false);
+  const [currentUser, setCurrentUser] = useState({});
+  const [isLogin, setIsLogin] = useState(false);
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const [serverError, setServerError] = useState('');
+  const [filmsSaved, setFilmsSaved] = useState([]);
 
-  const getUserInfoHandler = () => {
-    if (isLogin) {
-      getUserInfo()
-        .then((userInfo) => {
-          setCurrentUser(userInfo);
-        })
-        .catch((err) => {
-          setServerError(err);
-        });
-    }
+  const getFilmsSaved = () => {
+    getFilms()
+      .then((films) => {
+        setFilmsSaved(films);
+        setServerError('');
+      })
+      .catch((err) => {
+        setServerError(err);
+      });
   };
 
+  function saveFilm(film) {
+    addFilmSaved({
+      country: film.country,
+      director: film.director,
+      duration: film.duration,
+      year: film.year,
+      description: film.description,
+      image: `https://api.nomoreparties.co${film.image.url}`,
+      trailerLink: film.trailerLink,
+      nameRU: film.nameRU,
+      nameEN: film.nameEN,
+      thumbnail: `https://api.nomoreparties.co${film.image.formats.thumbnail.url}`,
+      movieId: film.id,
+    })
+      .then((film) => {
+        setFilmsSaved([film, ...filmsSaved]);
+        setServerError('');
+      })
+      .catch((err) => {
+        setServerError(err);
+      });
+  }
+
+  function deleteFilm(filmId) {
+    const filmToDelete = filmsSaved.find(
+      (movie) => filmId === movie.movieId);
+    removeFilmSaved(filmToDelete._id)
+      .then((deletedFilm) => {
+        setFilmsSaved(filmsSaved.filter((film) => film._id !== deletedFilm._id)
+        );
+        setServerError('');
+      })
+      .catch((err) => {
+        setServerError(err);
+      });
+  }
+
   const clearDataAccount = () => {
-    localStorage.removeItem('films');
-    localStorage.removeItem('queryFilms');
-    localStorage.removeItem('isShortFilms');
-    localStorage.removeItem('isLogin');
-    localStorage.removeItem('filmsSaved');
+    localStorage.clear();
     setIsLogin(false);
     navigate('/');
   };
@@ -44,6 +83,7 @@ export default function App() {
       logout()
         .then(() => {
           clearDataAccount();
+          setServerError('');
         })
         .catch((err) => {
           setServerError(err);
@@ -54,29 +94,40 @@ export default function App() {
   };
 
   useEffect(() => {
-    getUserInfoHandler();
-  }, [isLogin]);
+    const currentPath = pathname;
+    getUserInfo()
+      .then((userInfo) => {
+        setCurrentUser(userInfo);
+        setIsLogin(true);
+        navigate(currentPath);
+      })
+      .catch((err) => {
+        exitProfile();
+      });
+  }, [isLogin])
 
   useEffect(() => {
-    if (localStorage.getItem('isLogin')) {
-      checkToken()
-        .then(() => {
-          setIsLogin(true);
-        })
-        .catch((err) => {
-          setServerError(err);
-          exitProfile();
-        });
+    if (isLogin) {
+      getFilmsSaved()
     }
-  }, [])
+  }, [isLogin])
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Routes>
         <Route path="/">
           <Route index element={<Main isLogin={isLogin} />} />
-          <Route path="movies" element={<ProtectedRoute isLogin={isLogin} element={Movies} />} />
-          <Route path="saved-movies" element={<ProtectedRoute isLogin={isLogin} element={Movies} />} />
+          <Route path="movies" element={<ProtectedRoute isLogin={isLogin}
+                                                        saveFilm={saveFilm}
+                                                        deleteFilm={deleteFilm}
+                                                        filmsSaved={filmsSaved}
+                                                        errorMessage={serverError}
+                                                        element={Movies} />} />
+          <Route path="saved-movies" element={<ProtectedRoute isLogin={isLogin}
+                                                              deleteFilm={deleteFilm}
+                                                              filmsSaved={filmsSaved}
+                                                              errorMessage={serverError}
+                                                              element={Movies} />} />
           <Route
             path="profile"
             element={
@@ -84,7 +135,6 @@ export default function App() {
                 isLogin={isLogin}
                 setIsLogin={setIsLogin}
                 exitProfile={exitProfile}
-                getUserInfoHandler={getUserInfoHandler}
                 setCurrentUser={setCurrentUser}
                 element={Profile}
               />
@@ -92,11 +142,13 @@ export default function App() {
           />
           <Route
             path="signin"
-            element={isLogin && pathname === '/signin' ? navigate(-1) : <Auth setIsLogin={setIsLogin} />}
+            element={isLogin && pathname === '/signin' ? navigate(-1) :
+              <Auth setIsLogin={setIsLogin} />}
           />
           <Route
             path="signup"
-            element={isLogin && pathname === '/signup' ? navigate(-1) : <Auth setIsLogin={setIsLogin} />}
+            element={isLogin && pathname === '/signup' ? navigate(-1) :
+              <Auth setIsLogin={setIsLogin} />}
           />
           <Route path="*" element={<Error404 />} />
         </Route>

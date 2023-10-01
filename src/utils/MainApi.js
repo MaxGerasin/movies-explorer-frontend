@@ -66,17 +66,6 @@ const login = async (data) => {
   }).then((res) => getResponseData(res, 'При авторизации произошла ошибка.'));
 };
 
-const checkToken = async () => {
-  return fetch(`${URL}/users/me`, {
-    method: 'GET',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include',
-  }).then((res) => getResponseData(res, 'Не удалось проверить ваш токен'));
-};
-
 const logout = async () => {
   return fetch(`${URL}/signout`, {
     method: 'GET',
@@ -117,7 +106,6 @@ export {
   getFilms,
   registry,
   login,
-  checkToken,
   logout,
   getUserInfo,
   updateUserInfo,

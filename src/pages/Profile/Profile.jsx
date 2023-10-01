@@ -4,67 +4,59 @@ import CenterContainer from '../../components/CenterContainer/CenterContainer';
 import MainStyled from '../../components/MainStyled/MainStyled';
 import Modal from '../../components/Modal/Modal';
 import { updateUserInfo } from '../../utils/MainApi';
-import { useForm } from 'react-hook-form';
 import ErrorField from '../../components/ErrorField/ErrorField';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { profileSchema } from '../../utils/yup';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './Profile.css';
+import { useFormWithValidation } from '../../hooks/useFormWithValidation';
 
 export default function Profile({ exitProfile, setCurrentUser }) {
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  const [isDisabled, setIsDisabled] = useState(true);
+  const [isEdit, setIsEdit] = useState(false);
   const [serverError, setServerError] = useState('');
   const currentUser = useContext(CurrentUserContext);
+  const [isBlocked, setIsBlocked] = useState(false);
 
   const {
-    register,
-    handleSubmit,
-  formState: { errors },
-} = useForm({ resolver: yupResolver(profileSchema) });
+    values,
+    handleChange,
+    errors,
+    isValid,
+    setValues,
+  } = useFormWithValidation();
 
-  const handleEmail = (evt) => {
-    setEmail(evt.target.value);
-  };
-
-  const handleName = (evt) => {
-    setName(evt.target.value);
-  };
-
-  const checkEdit = (currName, currEmail) => {
-    if (currName !== name || currEmail !== email) {
-      setIsDisabled(false);
+  useEffect(() => {
+    if (values.name === currentUser.name && values.email === currentUser.email) {
+      setIsBlocked(true);
     } else {
-      setIsDisabled(true);
+      setIsBlocked(false);
     }
-  };
+  }, [values]);
 
-  const onEdit = () => {
-    
-    updateUserInfo({ name, email })
+  const handleEdit = () => {
+    setIsEdit(true);
+  }
+
+  const onEdit = (evt) => {
+    evt.preventDefault();
+    setIsBlocked(true);
+    updateUserInfo(values)
       .then(({ name, email }) => {
         setCurrentUser({ name, email });
-        checkEdit(name, email);
         setSuccessMessage('Данные обновлены');
+        setIsEdit(false);
       })
       .catch((err) => {
         setServerError(err);
       })
-      .finally(() =>  setTimeout(() => {
+      .finally(() => setTimeout(() => {
         setSuccessMessage('');
         setServerError('');
+        setIsBlocked(false);
       }, 3000));
   };
 
   useEffect(() => {
-    checkEdit(currentUser.name, currentUser.email);
-  }, [name, email]);
-
-  useEffect(() => {
-    setName(currentUser.name);
-    setEmail(currentUser.email);
+    setValues({ name: currentUser.name, email: currentUser.email })
   }, [currentUser.name, currentUser.email]);
 
   return (
@@ -74,52 +66,70 @@ export default function Profile({ exitProfile, setCurrentUser }) {
         <section className="profile" aria-label="Профиль">
           <CenterContainer>
             <h1 className="profile__title">Привет, {currentUser.name}!</h1>
-            <form onSubmit={handleSubmit(onEdit)} className="profile__form">
+            <form onSubmit={onEdit} className="profile__form">
               <div>
                 <label className="profile__label">
                   <span className="profile__label-text">Имя</span>
                   <input
-                   {...register('name')}
-                    onChange={handleName}
-                    value={name}
+                    name='name'
+                    onChange={handleChange}
+                    value={values.name ?? ''}
                     type="text"
                     className="profile__input"
+                    pattern='[A-Za-zА-Яа-яЁё\s\-]+'
                     required
+                    minLength="2"
+                    maxLength="30"
+                    disabled={!isEdit}
                   />
                 </label>
-                <ErrorField isActive={errors.name}>
-                    {errors.name ? errors.name.message : 'Ошибок нет'}
+                <ErrorField>
+                  {errors.name}
                 </ErrorField>
                 <label className="profile__label">
                   <span className="profile__label-text">E-mail</span>
                   <input
-                    {...register('email')}
-                    onChange={handleEmail}
-                    value={email}
+                    name='email'
+                    onChange={handleChange}
+                    value={values.email ?? ''}
                     type="email"
                     className="profile__input"
+                    pattern='^[a-zA-Z0-9+_.\-]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]{2,6}$'
                     required
+                    disabled={!isEdit}
                   />
                 </label>
-                <ErrorField isActive={errors.email}>
-                {errors.email ? errors.email.message : 'Ошибок нет'}
+                <ErrorField>
+                  {errors.email}
                 </ErrorField>
               </div>
               <div className="profile__button-wrapper">
-                <button
-                  type="submit"
-                  disabled={isDisabled}
-                  className="profile__button profile__button_type_edit-save button"
-                >
-                  Редактировать
-                </button>
-                <button
-                  onClick={exitProfile}
-                  type="button"
-                  className="profile__button profile__button_type_logout button"
-                >
-                  Выйти из аккаунта
-                </button>
+                {isEdit &&
+                  (<button
+                    type="submit"
+                    disabled={!isValid || isBlocked}
+                    className="profile__button profile__button_type_save button"
+                  >
+                    Сохранить
+                  </button>)}
+                {!isEdit &&
+                  (<>
+                    <button
+                      type="button"
+                      className="profile__button profile__button_type_edit button"
+                      onClick={handleEdit}
+                    >
+                      Редактировать
+                    </button>
+                    <button
+                      onClick={exitProfile}
+                      type="button"
+                      className="profile__button profile__button_type_logout button"
+                    >
+                      Выйти из аккаунта
+                    </button>
+                  </>
+                  )}
               </div>
             </form>
           </CenterContainer>

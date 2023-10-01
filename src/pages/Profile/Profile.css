@@ -69,14 +69,34 @@
   font-size: 13px;
   line-height: 1.1;
   background: none;
+  cursor: pointer;
 }
 
 .profile__button:disabled {
   cursor: auto;
 }
 
-.profile__button_type_edit-save {
+.profile__button_type_edit {
   font-weight: 400;
+}
+
+.profile__button_type_save {
+  width: 100%;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  background-color: #465DFF;
+  color: #FFFFFF;
+  font-weight: 500;
+  border-radius: 3px;
+}
+
+.profile__button_type_save:disabled {
+  background-color: #F8F8F8;
+  color: #C2C2C2;
+}
+
+.profile__button_type_save:disabled:hover {
+  opacity: 1;
 }
 
 .profile__button_type_logout {

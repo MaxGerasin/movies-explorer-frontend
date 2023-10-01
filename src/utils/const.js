@@ -98,6 +98,7 @@ const FILMS = [
 ];
 
 const URL = 'https://api.beatfilms.maxgerasin.nomoredomainsicu.ru';
+// const URL = 'http://localhost:3000';
 
 export { FILMS, URL };
 
