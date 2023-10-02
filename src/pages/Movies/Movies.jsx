@@ -42,6 +42,7 @@ export default function Movies({
       }
     } else {
       deleteFilm(film.movieId);
+      handleSetFilms(queryFilmsSaved);
     }
   };
 
@@ -62,6 +63,7 @@ export default function Movies({
       filmsData = JSON.parse(localStorage.getItem('filmsSaved'));
       if (filmsData) {
         const searchFilmsData = searchFilms(filmsData, query, false, checkShortFilmsSaved);
+        setQueryFilmsSaved(query);
         setFilmsSavedSearch(searchFilmsData);
       }
     }

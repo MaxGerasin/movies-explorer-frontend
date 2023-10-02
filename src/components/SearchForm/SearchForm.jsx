@@ -59,7 +59,6 @@ export default function SearchForm({
               type="text"
               className={clsx('search-form__input', errors.queryFilms && 'search-form__input_error')}
               placeholder="Фильм"
-              required
             />
             <button className="search-form__button button" />
             <ErrorField>
