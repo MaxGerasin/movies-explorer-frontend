@@ -16,8 +16,8 @@ export const useResize = () => {
 
   return {
     width,
-    isLargeScreen: width > 1280,
-    isMediumScreen: width <= 768,
+    isLargeScreen: width > 768,
+    isMediumScreen: width > 450 && width <= 768,
     isSmallScreen: width <= 450,
   };
 };
